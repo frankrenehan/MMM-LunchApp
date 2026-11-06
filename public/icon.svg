@@ -1,0 +1,2 @@
+<!-- A simple plate and leaf mark for the local food planner. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192"><rect width="192" height="192" rx="48" fill="#284f43"/><circle cx="96" cy="104" r="49" fill="none" stroke="#f4edce" stroke-width="7"/><circle cx="96" cy="104" r="33" fill="none" stroke="#f4edce" stroke-width="3"/><path d="M98 76C89 53 99 35 124 32c4 22-6 39-26 44Z" fill="#a8c29b"/><path d="m99 77 13-28" stroke="#284f43" stroke-width="3" stroke-linecap="round"/></svg>

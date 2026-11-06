@@ -1,0 +1,13 @@
+{
+  "name": "mmm-lunch",
+  "version": "0.1.0",
+  "description": "A shared, local two-week food planner and display for MagicMirror²",
+  "main": "MMM-Lunch.js",
+  "private": true,
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "node dev-server.js"
+  }
+}

@@ -1,0 +1,7 @@
+/* Minimal typography for the food plan on the MagicMirror display. */
+.MMM-Lunch .lunch-plan { max-width: 360px; text-align: left; }
+.MMM-Lunch .lunch-date { margin-bottom: 12px; }
+.MMM-Lunch .lunch-slot { margin-bottom: 12px; }
+.MMM-Lunch .lunch-label { font-size: .8em; }
+.MMM-Lunch .lunch-food { white-space: pre-line; line-height: 1.35; }
+.MMM-Lunch .lunch-special { font-size: .75em; }

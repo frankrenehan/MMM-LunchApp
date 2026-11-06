@@ -1,0 +1,10 @@
+{
+  "name": "The everyday table",
+  "short_name": "Food plan",
+  "start_url": "/lunch/",
+  "scope": "/lunch/",
+  "display": "standalone",
+  "background_color": "#f7f6ef",
+  "theme_color": "#284f43",
+  "icons": [{ "src": "/lunch/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
