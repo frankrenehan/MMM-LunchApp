@@ -126,3 +126,5 @@ fieldset:disabled { opacity:.45; }
   .eyebrow { font-size:9px; letter-spacing:1.4px; }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; } }
+.heading-actions { display:flex; gap:10px; flex-wrap:wrap; }
+#shopping-dialog textarea { font-size:13px; min-height:260px; }

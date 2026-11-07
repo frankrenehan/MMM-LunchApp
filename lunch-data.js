@@ -129,6 +129,35 @@ function buildDisplay(plan, now = new Date()) {
   return { ...pickDate(plan, addDays(clock.date, tomorrow ? 1 : 0)), label: tomorrow ? "Tomorrow" : "Today" };
 }
 
-const LunchData = { DAYS, SLOTS, PlanError, blankPlan, validatePlan, dateNumber, addDays, weekday, localClock, pickDate, buildDisplay };
+function mondayOf(date) {
+  // dateNumber 0 (1970-01-01) was a Thursday, so Monday-based offset is (n + 3) % 7.
+  return addDays(date, -(((dateNumber(date) + 3) % 7 + 7) % 7));
+}
+
+function shoppingPrompt(plan, monday) {
+  const LABEL = { amSnack: "AM snack", lunch: "Lunch", pmSnack: "PM snack" };
+  const nice = date => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", timeZone: "UTC" })
+    .format(new Date(dateNumber(date) * DAY_MS));
+  const days = DAYS.map((_, i) => pickDate(plan, addDays(monday, i)));
+  const lines = [];
+  for (const food of days) {
+    lines.push(`${food.day}, ${nice(food.date)}`);
+    if (food.status === "closed") lines.push("- No school, nothing needed");
+    else if (food.status === "setup" || food.status === "empty") lines.push("- Nothing planned yet");
+    else for (const slot of SLOTS) {
+      if (food[slot]) lines.push(`- ${LABEL[slot]}: ${food[slot].split("\n").map(x => x.trim()).filter(Boolean).join(", ")}`);
+    }
+    lines.push("");
+  }
+  const week = days[0].week ? ` (Week ${days[0].week} of our rotation)` : "";
+  return [
+    `Here is the school food plan for the week of ${nice(monday)}${week}: an AM snack, a packed lunch and a PM snack each school day.`,
+    "Please turn it into a grocery shopping list: combine repeated items, estimate quantities for these days, group the list by store section, and flag anything that needs to be bought fresh mid-week. Leave out common pantry staples unless they are listed.",
+    "",
+    ...lines
+  ].join("\n").trim() + "\n";
+}
+
+const LunchData = { DAYS, SLOTS, PlanError, blankPlan, validatePlan, dateNumber, addDays, weekday, localClock, pickDate, buildDisplay, mondayOf, shoppingPrompt };
 if (typeof module !== "undefined" && module.exports) module.exports = LunchData;
 else globalThis.LunchData = LunchData;

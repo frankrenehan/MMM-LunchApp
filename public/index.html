@@ -40,7 +40,7 @@
       </aside>
 
       <section id="panel-today" class="panel" aria-labelledby="tab-today">
-        <div class="section-heading"><div><h2>What’s on the table?</h2><p>The usual routine, with room for a change of plans.</p></div><button class="button subtle" id="choose-date">Change another date</button></div>
+        <div class="section-heading"><div><h2>What’s on the table?</h2><p>The usual routine, with room for a change of plans.</p></div><div class="heading-actions"><button class="button subtle" id="open-shopping">Shopping list prompt</button><button class="button subtle" id="choose-date">Change another date</button></div></div>
         <div id="day-cards" class="day-cards"></div>
         <div class="mirror-note"><span class="dot"></span><span id="mirror-note">The mirror follows this plan.</span></div>
         <section id="changes-section" class="changes" hidden><h3>Changes for specific dates</h3><p>These replace one day without changing the repeating menu.</p><div id="changes-list"></div></section>
@@ -83,6 +83,15 @@
       <p class="field-help">This replaces all three meal slots for this date. The two-week menu stays the same.</p>
       <div class="dialog-actions"><button type="button" id="restore-date" class="button subtle">Use repeating menu</button><button type="submit" class="button primary">Apply to draft</button></div>
     </form>
+  </dialog>
+
+  <dialog id="shopping-dialog">
+    <div class="dialog-top"><p class="eyebrow">FOR YOUR AI ASSISTANT</p><button id="close-shopping" type="button" class="icon-button" aria-label="Close shopping list prompt">×</button></div>
+    <h2>Make a shopping list</h2>
+    <div class="week-switch" aria-label="Which week"><button id="shop-this" type="button" class="selected" aria-pressed="true">This week</button><button id="shop-next" type="button" aria-pressed="false">Next week</button></div>
+    <label for="shopping-text">Copy this and paste it into Claude or another assistant</label><textarea id="shopping-text" rows="14" readonly></textarea>
+    <p class="field-help" id="shopping-help">Uses the plan on this page, including unsaved changes.</p>
+    <div class="dialog-actions"><span></span><button type="button" id="copy-shopping" class="button primary">Copy prompt</button></div>
   </dialog>
 
   <template id="day-card-template"><article class="day-card"><header><div><p class="eyebrow day-relative"></p><h3 class="day-name"></h3><p class="day-meta"></p></div><span class="day-tag"></span></header><div class="day-foods"></div><button class="button subtle change-day">Change this date <span aria-hidden="true">↗</span></button></article></template>

@@ -2,7 +2,7 @@
 "use strict";
 
 (() => {
-  const { DAYS, SLOTS, validatePlan, localClock, addDays, pickDate, buildDisplay } = globalThis.LunchData;
+  const { DAYS, SLOTS, validatePlan, localClock, addDays, pickDate, buildDisplay, mondayOf, shoppingPrompt } = globalThis.LunchData;
   const $ = id => document.getElementById(id);
   const LABELS = { amSnack: "AM snack", lunch: "Lunch", pmSnack: "PM snack" };
   let draft = null;
@@ -233,6 +233,47 @@
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+
+  let shopNext = false;
+  function renderShopping() {
+    if (!draft) return;
+    const today = localClock(new Date(), draft.settings.timeZone).date;
+    const monday = addDays(mondayOf(today), shopNext ? 7 : 0);
+    for (const [id, on] of [["shop-this", !shopNext], ["shop-next", shopNext]]) {
+      $(id).classList.toggle("selected", on);
+      $(id).setAttribute("aria-pressed", String(on));
+    }
+    $("shopping-text").value = shoppingPrompt(draft, monday);
+    $("shopping-help").textContent = "Uses the plan on this page, including unsaved changes.";
+  }
+  function openShopping() {
+    if (!draft) return;
+    try { validatePlan(draft); } catch (error) { message(error.message, true); return; }
+    // At the weekend you are usually shopping for the coming week.
+    const day = new Date(`${localClock(new Date(), draft.settings.timeZone).date}T12:00:00Z`).getUTCDay();
+    shopNext = day === 0 || day === 6;
+    renderShopping();
+    $("shopping-dialog").showModal();
+  }
+  async function copyShopping() {
+    const text = $("shopping-text").value;
+    let copied = false;
+    // navigator.clipboard needs HTTPS or localhost; the mirror is plain http on the LAN, so fall back to execCommand.
+    if (navigator.clipboard && window.isSecureContext) {
+      try { await navigator.clipboard.writeText(text); copied = true; } catch {}
+    }
+    if (!copied) {
+      $("shopping-text").focus();
+      $("shopping-text").setSelectionRange(0, text.length);
+      try { copied = document.execCommand("copy"); } catch {}
+    }
+    $("shopping-help").textContent = copied ? "Copied. Paste it into your assistant." : "Couldn't copy automatically. The text is selected; use your phone's Copy.";
+  }
+  $("open-shopping").addEventListener("click", openShopping);
+  $("close-shopping").addEventListener("click", () => $("shopping-dialog").close());
+  $("shop-this").addEventListener("click", () => { shopNext = false; renderShopping(); });
+  $("shop-next").addEventListener("click", () => { shopNext = true; renderShopping(); });
+  $("copy-shopping").addEventListener("click", copyShopping);
 
   document.querySelectorAll("[data-panel]").forEach(button => button.addEventListener("click", () => showPanel(button.dataset.panel)));
   $("setup-button").addEventListener("click", () => showPanel("settings", true));
